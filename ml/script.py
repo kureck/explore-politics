@@ -4,6 +4,7 @@ import xmltodict
 import base64
 import aiohttp
 import asyncio
+import json
 from extract_rtf import striprtf
 
 # https://github.com/pmarkun/discursos-genero
@@ -60,7 +61,7 @@ for date in daterange:
 
 discourses_url = "http://www.camara.gov.br/SitCamaraWS/SessoesReunioes.asmx/obterInteiroTeorDiscursosPlenario?codSessao=320.2.54.O&numOrador=2&numQuarto=28&numInsercao=1"
 
-crawled_urls, url_hub = [], urls[0:30]
+crawled_urls, url_hub = [], urls
 
 async def get_body(url):
     response = await aiohttp.request('GET', url)
@@ -86,7 +87,8 @@ if __name__ == '__main__':
     q = asyncio.Queue()
     [q.put_nowait(url) for url in url_hub]
     loop = asyncio.get_event_loop()
-    tasks = [handle_task(task_id, q) for task_id in range(10)]
+    tasks = [handle_task(task_id, q) for task_id in range(100)]
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
-    print(d)
+    with open('data.json', 'w') as outfile:
+        json.dump(d, outfile, ensure_ascii=False)
