@@ -64,8 +64,9 @@ discourses_url = "http://www.camara.gov.br/SitCamaraWS/SessoesReunioes.asmx/obte
 crawled_urls, url_hub = [], urls
 
 async def get_body(url):
-    response = await aiohttp.request('GET', url)
-    return await response.read()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, timeout=60) as response:
+            return await response.read()
 
 d = []
 
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     q = asyncio.Queue()
     [q.put_nowait(url) for url in url_hub]
     loop = asyncio.get_event_loop()
-    tasks = [handle_task(task_id, q) for task_id in range(100)]
+    tasks = [handle_task(task_id, q) for task_id in range(10)]
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
     with open('data.json', 'w') as outfile:
