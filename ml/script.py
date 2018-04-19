@@ -53,6 +53,7 @@ for date in daterange:
                 discourses['room_num'] = d['numeroQuarto']
                 discourses['insertion_num'] = d['numeroInsercao']
                 discourses_ids.append(discourses)
+                #write url to file
                 urls.append(discourses_url.format(codes['code'], discourses['speaker_num'], discourses['room_num'], discourses['insertion_num']))
             codes['discourses'] = discourses_ids
             sessions_ids.append(codes)
