@@ -1,5 +1,5 @@
 def load_urls():
-    with open('../../../data/urls.txt', 'r') as f:
+    with open('../../../data/urls-2.txt', 'r') as f:
         urls = f.readlines()
 
     return urls
